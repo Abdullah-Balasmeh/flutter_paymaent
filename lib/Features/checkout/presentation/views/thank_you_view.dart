@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_payment/Features/checkout/presentation/widgets/my_cart_view_body.dart';
 import 'package:flutter_payment/core/widgets/custom_app_bar.dart';
 
-class MyCartView extends StatelessWidget {
-  const MyCartView({super.key});
+class ThankYouView extends StatelessWidget {
+  const ThankYouView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,9 +11,11 @@ class MyCartView extends StatelessWidget {
         onPressed: () {
           Navigator.pop(context);
         },
-        title: 'My Cart',
+        title: 'Thank You',
       ),
-      body: const MyCartViewBody(),
+      body: const Center(
+        child: Text('Thank you'),
+      ),
     );
   }
 }
