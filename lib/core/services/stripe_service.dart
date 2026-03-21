@@ -2,6 +2,7 @@ import 'package:flutter_payment/Features/checkout/data/models/payment_intent_inp
 import 'package:flutter_payment/Features/checkout/data/models/payment_intent_model.dart';
 import 'package:flutter_payment/core/services/dio_service.dart';
 import 'package:flutter_payment/core/utils/app_config.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 class StripeService {
   final DioService dioService = DioService();
@@ -16,5 +17,14 @@ class StripeService {
     );
     var paymentIntentModel = PaymentIntentModel.fromJson(response.data as Map<String, dynamic>);
     return paymentIntentModel;
+  }
+
+  Future<void> initPaymentSheet({required String paymentIntentClientSecret}) async {
+    await Stripe.instance.initPaymentSheet(
+      paymentSheetParameters: SetupPaymentSheetParameters(
+        paymentIntentClientSecret: paymentIntentClientSecret,
+        merchantDisplayName: 'Flutter Payment',
+      ),
+    );
   }
 }
