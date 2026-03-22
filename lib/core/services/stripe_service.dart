@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_payment/Features/checkout/data/models/payment_intent_input_model.dart';
 import 'package:flutter_payment/Features/checkout/data/models/payment_intent_model.dart';
 import 'package:flutter_payment/core/services/dio_service.dart';
@@ -13,7 +14,7 @@ class StripeService {
       url: 'https://api.stripe.com/v1/payment_intents',
       data: paymentIntentInputModel.toJson(),
       token: AppConfig.secretKey,
-      contentType: 'application/x-www-form-urlencoded',
+      contentType: Headers.formUrlEncodedContentType,
     );
     var paymentIntentModel = PaymentIntentModel.fromJson(response.data as Map<String, dynamic>);
     return paymentIntentModel;
@@ -26,5 +27,15 @@ class StripeService {
         merchantDisplayName: 'Flutter Payment',
       ),
     );
+  }
+
+  Future<void> presentPaymentSheet() async {
+    await Stripe.instance.presentPaymentSheet();
+  }
+
+  Future<void> makePayment({required PaymentIntentInputModel paymentIntentInputModel}) async {
+    var paymentIntentModel = await createPaymentIntent(paymentIntentInputModel);
+    await initPaymentSheet(paymentIntentClientSecret: paymentIntentModel.clientSecret!);
+    await presentPaymentSheet();
   }
 }
